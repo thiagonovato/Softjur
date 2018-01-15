@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="template.xhtml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:tb="http://xmlns.jcp.org/jsf/composite/tbcomp"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<div style="height: 100%">
+		<h:form id="formListagem">
+			<p:panel header="Correspondentes">
+				<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
+					paginator="true" value="#{correspondenteBean.correspondentes}"
+					var="correspondente" rows="5">
+					<f:facet name="header">
+						<p:commandButton value="Novo" oncomplete="PF('dialogo').show();"
+							actionListener="#{correspondenteBean.novo}"
+							update=":mensagem :formCadastro:painel :formCadastro:painel2">
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+
+					</f:facet>
+
+					<p:column headerText="Nome"
+						filterBy="#{correspondente.pessoa.nome}"
+						sortBy="#{correspondente.pessoa.nome}" filterMatchMode="contains">
+						<h:outputText value="#{correspondente.pessoa.nome}" />
+					</p:column>
+
+					<p:column headerText="CPF" filterBy="#{correspondente.pessoa.cpf}"
+						sortBy="#{correspondente.pessoa.cpf}" filterMatchMode="contains">
+						<h:outputText value="#{correspondente.pessoa.cpf}" />
+					</p:column>
+
+					<p:column headerText="Dados Bancários"
+						sortBy="#{correspondente.banco}">
+						<h:outputText
+							value="#{correspondente.banco.sigla} / #{correspondente.agencia} / #{correspondente.contaCorrente}" />
+					</p:column>
+
+					<p:column headerText="Data de Cadastro"
+						sortBy="#{correspondente.dataCadastro}">
+						<h:outputText value="#{correspondente.dataCadastro}">
+							<f:convertDateTime locale="pt_BR" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Ativo"
+						sortBy="#{correspondente.ativoFormatado}">
+						<h:outputText value="#{correspondente.ativoFormatado}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+						<p:commandButton icon="ui-icon-pencil"
+							oncomplete="PF('dialogo').show();"
+							actionListener="#{correspondenteBean.editar}"
+							update=":mensagem :formCadastro:painel :formCadastro:painel2">
+							<f:attribute value="#{correspondente}"
+								name="correspondenteSelecionado" />
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{correspondenteBean.excluir}"
+							update=":mensagem :formListagem:tabela">
+							<p:confirm header="Confirmação" message="Confirma exclusão?"
+								icon="ui-icon-alert" />
+							<f:attribute value="#{correspondente}"
+								name="correspondenteSelecionado" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+				<p:confirmDialog global="true">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Não" type="button" icon="ui-icon-close"
+						styleClass="ui-confirmdialog-no" />
+				</p:confirmDialog>
+			</p:panel>
+		</h:form>
+
+		<p:dialog header="Correspondentes - Cadastro" widgetVar="dialogo"
+			draggable="false" resizable="false" modal="true" closable="false">
+			<h:form id="formCadastro">
+				<p:fieldset legend="Dados Gerais">
+					<h:panelGrid id="painel" columns="2">
+						<p:outputLabel for="pessoa" value="Pessoa:" />
+						<p:selectOneMenu id="pessoa" filter="true"
+							filterMatchMode="contains"
+							value="#{correspondenteBean.correspondente.pessoa}"
+							required="true" requiredMessage="O campo 'Pessoa' é obrigatório"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione uma pessoa" />
+							<f:selectItems value="#{correspondenteBean.pessoas}" var="pessoa"
+								itemValue="#{pessoa}" itemLabel="#{pessoa.nome} - #{pessoa.cpf}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="dataCadastro" value="Data de Cadastro:" />
+						<p:calendar id="dataCadastro"
+							value="#{correspondenteBean.correspondente.dataCadastro}"
+							required="true"
+							requiredMessage="O campo 'Data de Cadastro' é obrigatório"
+							size="10" locale="pt_BR" />
+
+						<p:outputLabel for="ativo" value="Ativo:" />
+						<p:selectBooleanCheckbox id="ativo"
+							value="#{correspondenteBean.correspondente.ativo}"
+							required="true" requiredMessage="O campo 'Ativo' é obrigatório" />
+					</h:panelGrid>
+				</p:fieldset>
+				<p:separator></p:separator>
+				<p:fieldset legend="Dados Bancários">
+					<h:panelGrid id="painel2" columns="2">
+						<p:outputLabel for="banco" value="Banco:" />
+						<p:selectOneMenu id="banco" filter="true"
+							filterMatchMode="contains"
+							value="#{correspondenteBean.correspondente.banco}"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione um banco" />
+							<f:selectItems value="#{correspondenteBean.bancos}" var="banco"
+								itemValue="#{banco}" itemLabel="#{banco.sigla} - #{banco.nome}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="agencia" value="Agência:" />
+						<p:inputText id="agencia" maxlength="50" size="30"
+							value="#{correspondenteBean.correspondente.agencia}" />
+
+						<p:outputLabel for="contacorrente" value="Conta Corrente:" />
+						<p:inputText id="contacorrente" maxlength="50" size="30"
+							value="#{correspondenteBean.correspondente.contaCorrente}" />
+					</h:panelGrid>
+				</p:fieldset>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar"
+						update=":mensagem :formCadastro:painel :formCadastro:painel2 :formListagem:tabela"
+						actionListener="#{correspondenteBean.salvar}" />
+					<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</div>
+</ui:composition>
+

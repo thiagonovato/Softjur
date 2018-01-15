@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+	<h:form id="formCadPerfil">
+		<b:growl id="msgPerfil" />
+		<b:panel id="painelCadPerfil" look="primary" title="Meu Perfil"
+			collapsible="false">
+			<b:column span="4" contentDisabled="false">
+				<b:inputText required="true" maxlength="150"
+					requiredMessage="'Nome' é obrigatório."
+					value="#{meuPerfilBean.pessoa.nome}" label="Nome" />
+				<b:inputText required="true" maxlength="50"
+					requiredMessage="'RG' é obrigatório."
+					value="#{meuPerfilBean.pessoa.rg}" label="RG" />
+				<b:inputText required="true" maxlength="14"
+					requiredMessage="'CPF' é obrigatório." label="CPF"
+					value="#{meuPerfilBean.pessoa.cpf}" mask="999.999.999-99" />
+			</b:column>
+
+			<b:column span="4">
+				<b:selectOneMenu id="estado" filter="true"
+					filterMatchMode="contains"
+					converter="omnifaces.SelectItemsConverter"
+					value="#{meuPerfilBean.estado}" label="Estado">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione um estado" />
+					<f:selectItems value="#{meuPerfilBean.estados}" var="estado"
+						itemValue="#{estado}" itemLabel="#{estado.nome}" />
+					<f:ajax listener="#{meuPerfilBean.popular}" event="change"
+						render=":formCadPerfil:painelCadPerfil:cidadeUpdate" />
+				</b:selectOneMenu>
+				<b:selectOneMenu id="cidadeUpdate" filter="true" required="true"
+					filterMatchMode="contains" label="Cidade"
+					requiredMessage="O campo 'Cidade' é obrigatório"
+					converter="omnifaces.SelectItemsConverter"
+					value="#{meuPerfilBean.pessoa.cidade}">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Selecione uma cidade" />
+					<f:selectItems value="#{meuPerfilBean.cidades}" var="cidade"
+						itemValue="#{cidade}" itemLabel="#{cidade.nome}" />
+				</b:selectOneMenu>
+				<b:inputText required="true" maxlength="100"
+					requiredMessage="'Rua' é obrigatório." label="Rua"
+					value="#{meuPerfilBean.pessoa.rua}" />
+				<b:inputText maxlength="100" label="Complemento"
+					value="#{meuPerfilBean.pessoa.complemento}" />
+				<b:inputText maxlength="5" value="#{meuPerfilBean.pessoa.numero}"
+					label="Número" required="true"
+					requiredMessage="O campo 'Número' é obrigatório"
+					converterMessage="Informe um valor válido para o campo 'Número'"
+					validatorMessage="Informe um valor entre 1 e 32767 para o campo 'Número'">
+					<f:validateLongRange minimum="1" maximum="32767" />
+				</b:inputText>
+				<b:inputText maxlength="30" required="true" label="Bairro"
+					requiredMessage="'Bairro' é obrigatório."
+					value="#{meuPerfilBean.pessoa.bairro}" />
+				<b:inputText required="true" mask="99.999-999"
+					requiredMessage="'CEP' é obrigatório."
+					value="#{meuPerfilBean.pessoa.cep}" label="CEP" />
+			</b:column>
+
+			<b:column span="4">
+				<b:inputText mask="(99)9999-9999"
+					value="#{meuPerfilBean.pessoa.telefone}" label="Telefone" />
+				<b:inputText required="true" mask="(99)99999-9999"
+					requiredMessage="'Celular' é obrigatório."
+					value="#{meuPerfilBean.pessoa.celular}" label="Celular" />
+				<b:inputText required="true"
+					requiredMessage="'Email' é obrigatório."
+					value="#{meuPerfilBean.pessoa.email}" label="Email" />
+			</b:column>
+			<f:facet name="footer">
+				<b:commandButton value="Salvar" ajax="true" look="primary"
+					update=":formCadPerfil:msgPerfil" icon="save"
+					actionListener="#{meuPerfilBean.salvar}" size="xs" />
+			</f:facet>
+		</b:panel>
+	</h:form>
+</ui:composition>

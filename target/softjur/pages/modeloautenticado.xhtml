@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+	<h:outputStylesheet library="css" name="estilos.css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>SoftJur - Software de Logística Jurídica - Logus IT</title>
+	<!-- Smartsupp Live Chat script -->
+	<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = 'ca10624ad4506c90d84e96cececbb00c00d517bd';
+window.smartsupp||(function(d) {
+	var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+	s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+	c.type='text/javascript';c.charset='utf-8';c.async=true;
+	c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+</h:head>
+<h:body>
+	<b:growl id="mensagem" />
+	<h:panelGrid>
+		<h:graphicImage library="imagens" name="logo.jpg" />
+	</h:panelGrid>
+	<h:form>
+		<b:navBar brand="Home" brandHref="principal.xhtml">
+			<b:navbarLinks>
+				<b:dropMenu value="Audiências"
+					rendered="#{autenticacaoBean.temPermissoes('/pages/menuaudiencia.xhtml')}">
+					<b:navLink value="Gerenciar" href="audiencias.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/audiencias.xhtml')}" />
+					<b:navLink value="Suas audiências"
+						href="audienciascorrespondente.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/audienciascorrespondente.xhtml')}" />
+					<b:navLink value="Upload" href="upload.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/upload.xhtml')}" />
+				</b:dropMenu>
+				<b:dropMenu value="Cadastros"
+					rendered="#{autenticacaoBean.temPermissoes('/pages/menucadastros.xhtml')}">
+					<b:navLink value="Bancos" href="bancos.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/bancos.xhtml')}" />
+					<b:navLink value="Correspondentes" href="correspondentes.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/correspondentes.xhtml')}" />
+					<b:navLink value="Escritórios" href="escritorios.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/escritorios.xhtml')}" />
+					<b:navLink value="Empresas" href="empresas.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/empresas.xhtml')}" />
+					<b:navLink value="Órgãos" href="orgaos.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/orgaos.xhtml')}" />
+					<b:navLink value="Pessoas" href="pessoas.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/pessoas.xhtml')}" />
+					<b:navLink value="Usuários" href="usuarios.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/usuarios.xhtml')}" />
+				</b:dropMenu>
+				<b:dropMenu value="Configurações"
+					rendered="#{autenticacaoBean.temPermissoes('/pages/menuconfig.xhtml')}">
+					<b:dropMenu value="Locais"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/menulocais.xhtml')}">
+						<b:navLink value="Cidades" href="cidades.xhtml"
+							rendered="#{autenticacaoBean.temPermissoes('/pages/cidades.xhtml')}" />
+						<b:navLink value="Estados" href="estados.xhtml"
+							rendered="#{autenticacaoBean.temPermissoes('/pages/estados.xhtml')}" />
+					</b:dropMenu>
+					<b:navLink value="Tipos de Audiência" href="tiposaudiencia.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/tiposaudiencia.xhtml')}" />
+					<b:navLink value="Status" href="status.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/status.xhtml')}" />
+				</b:dropMenu>
+				<b:dropMenu value="Sistema"
+					rendered="#{autenticacaoBean.temPermissoes('/pages/menusistema.xhtml')}">
+					<b:navLink value="Permissões de Páginas"
+						href="paginaspermissao.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/paginaspermissao.xhtml')}" />
+					<b:navLink value="Parâmetros Gerais" href="parametrosgerais.xhtml"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/parametrosgerais.xhtml')}" />
+				</b:dropMenu>
+			</b:navbarLinks>
+			<b:navbarLinks pull="right">
+				<b:dropMenu value="Usuário: #{session.getValue('nome')}">
+					<b:navLink value="Meu Perfil" href="meuperfil.xhtml"
+						iconAwesome="user"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/meuperfil.xhtml')}" />
+					<b:navLink value="Alterar Senha" href="senha.xhtml"
+						iconAwesome="key"
+						rendered="#{autenticacaoBean.temPermissoes('/pages/senha.xhtml')}" />
+					<b:navCommandLink iconAwesome="sign-out" value="Sair"
+						action="#{autenticacaoBean.deslogar}" />
+				</b:dropMenu>
+			</b:navbarLinks>
+		</b:navBar>
+	</h:form>
+	<hr />
+	<ui:insert></ui:insert>
+	<script>
+  $.blockUI.defaults = {
+		  message:'<h:graphicImage library="imagens" name="loading.gif" />',
+		  title: null, 
+		  draggable: true,
+		  theme: false,
+		  css: { 
+			    padding:        0, 
+		        margin:         0, 
+		        width:          '30%', 
+		        top:            '40%', 
+		        left:           '35%', 
+		        textAlign:      'center', 
+		        color:          '#000', 
+		        cursor:         'wait' 
+		    }, 
+		    overlayCSS:  { 
+		    	backgroundColor: '#000', 
+		        opacity:         0.6, 
+		        cursor:          'wait' 
+		    }, 
+		  centerX: true,
+		  centerY: true,
+		  allowBodyStretch: true, 
+		  
+		    // enable if you want key and mouse events to be disabled for content that is blocked 
+		    bindEvents: true, 
+		 
+		    // be default blockUI will supress tab navigation from leaving blocking content 
+		    // (if bindEvents is true) 
+		    constrainTabKey: true, 
+		 
+		    // fadeIn time in millis; set to 0 to disable fadeIn on block 
+		    fadeIn:  200, 
+		 
+		    // fadeOut time in millis; set to 0 to disable fadeOut on unblock 
+		    fadeOut:  400, 
+		 
+		    // time in millis to wait before auto-unblocking; set to 0 to disable auto-unblock 
+		    timeout: 0, 
+		 
+		    // disable if you don't want to show the overlay 
+		    showOverlay: true, 
+		 
+		    // if true, focus will be placed in the first available input field when 
+		    // page blocking 
+		    focusInput: true, 
+		 
+		    // suppresses the use of overlay styles on FF/Linux (due to performance issues with opacity) 
+		    // no longer needed in 2012 
+		    // applyPlatformOpacityRules: true, 
+		 
+		    // callback method invoked when fadeIn has completed and blocking message is visible 
+		    onBlock: null, 
+		 
+		    // callback method invoked when unblocking has completed; the callback is 
+		    // passed the element that has been unblocked (which is the window object for page 
+		    // blocks) and the options that were passed to the unblock call: 
+		    //   onUnblock(element, options) 
+		    onUnblock: null, 
+		 
+		    // don't ask; if you really must know: http://groups.google.com/group/jquery-en/browse_thread/thread/36640a8730503595/2f6a79a77a78e493#2f6a79a77a78e493 
+		    quirksmodeOffsetHack: 4, 
+		 
+		    // class name of the message block 
+		    blockMsgClass: 'blockMsg', 
+		 
+		    // if it is already blocked, then ignore it (don't unblock and reblock) 
+		    ignoreIfBlocked: false 
+		  }
+</script>
+</h:body>
+</html>
+

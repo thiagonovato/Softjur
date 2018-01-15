@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+	<h:form id="formTipo">
+		<b:row>
+			<b:column>
+				<b:panel id="painelTipo" look="primary" title="Tipos de Audiência"
+					collapsible="false">
+					<b:commandButton value="Novo" ajax="true" look="primary"
+						actionListener="#{tipoAudienciaBean.novo}" icon="file" size="xs"
+						update=":mensagem :formCadTipo:msgTipo :formCadTipo:painelCadTipo"
+						oncomplete="$('.responsiveModalPseudoClass').modal();">
+						<f:actionListener
+							type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</b:commandButton>
+					<p />
+					<b:dataTable value="#{tipoAudienciaBean.tiposAudiencia}"
+						var="tipoAudiencia"
+						customLangUrl="#{resource['/tradutor/pt-br.json']}"
+						responsive="true" scroll-size="400px" scroll-x="false">
+						<b:dataTableColumn label="Nome" value="#{tipoAudiencia.nome}" />
+						<b:dataTableColumn label="Descrição"
+							value="#{tipoAudiencia.descricao}" />
+						<b:dataTableColumn label="Ativo"
+							value="#{tipoAudiencia.ativoFormatado}" />
+						<b:dataTableColumn label="Opções">
+							<b:commandButton icon="edit" ajax="true" look="primary"
+								actionListener="#{tipoAudienciaBean.editar}" size="xs"
+								update=":mensagem :formCadTipo:msgTipo :formCadTipo:painelCadTipo"
+								oncomplete="$('.responsiveModalPseudoClass').modal();">
+								<f:attribute value="#{tipoAudiencia}" name="tipoSelecionado" />
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</b:commandButton>
+
+							<h:outputText value="   " />
+
+							<b:commandButton icon="trash" ajax="true" look="danger"
+								actionListener="#{tipoAudienciaBean.excluir}" size="xs"
+								onclick="return confirm('Confirma a exclusão? ');"
+								update=":mensagem :formCadTipo:msgTipo :formCadTipo:painelCadTipo :formTipo:painelTipo">
+								<f:attribute value="#{tipoAudiencia}" name="tipoSelecionado" />
+							</b:commandButton>
+
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:panel>
+			</b:column>
+		</b:row>
+	</h:form>
+	<b:modal id="modalTipo" title="Tipos de Audiência" closeOnEscape="true"
+		styleClass="responsiveModalPseudoClass" backdrop="false">
+		<h:form id="formCadTipo">
+			<b:messages id="msgTipo" />
+			<b:panel id="painelCadTipo" look="primary" title="Tipos de Audiência"
+				collapsible="false">
+				<b:row>
+					<b:column>
+						<h:outputLabel value="Nome: " />
+					</b:column>
+					<b:column>
+						<b:inputText required="true" maxlength="50"
+							requiredMessage="'Nome' é obrigatório."
+							value="#{tipoAudienciaBean.tipoAudiencia.nome}" />
+					</b:column>
+				</b:row>
+				<b:row>
+					<b:column>
+						<h:outputLabel value="Descrição " />
+					</b:column>
+					<b:column>
+						<b:inputTextarea required="true" maxlength="200"
+							requiredMessage="'Descrição' é obrigatório."
+							value="#{tipoAudienciaBean.tipoAudiencia.descricao}" />
+					</b:column>
+				</b:row>
+				<b:row>
+					<b:column>
+						<h:outputLabel value="Ativo: " />
+					</b:column>
+					<b:column>
+						<b:selectBooleanCheckbox id="ativo"
+							value="#{tipoAudienciaBean.tipoAudiencia.ativo}" />
+					</b:column>
+				</b:row>
+				<f:facet name="footer">
+					<b:commandButton value="Salvar" ajax="true" look="primary"
+						icon="save" actionListener="#{tipoAudienciaBean.salvar}" size="xs"
+						update=":formTipo:painelTipo :formCadTipo:painelCadTipo :formCadTipo:msgTipo" />
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+
+
+
+</ui:composition>

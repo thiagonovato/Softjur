@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="modelo.xhtml">
+	<h:form id="loginForm">
+		<b:row>
+			<b:column span="4" offset="4">
+				<b:panel look="primary" title="Autenticação" collapsible="false">
+					<b:row>
+						<b:column medium-screen="3">
+							<h:outputLabel for="Login" value="Login: " />
+						</b:column>
+						<b:column medium-screen="8">
+							<b:inputText id="login" size="15"
+								required="true" requiredMessage="CPF é obrigatório."
+								value="#{autenticacaoBean.usuario.login}"
+								placeholder="Login" update=":mensagem">
+								<f:facet name="prepend">
+									<b:icon name="user" />
+								</f:facet>
+							</b:inputText>
+						</b:column>
+					</b:row>
+					<b:row>
+						<b:column medium-screen="3">
+							<h:outputText value="Senha:" />
+						</b:column>
+						<b:column medium-screen="8">
+							<b:inputSecret placeholder="Senha" id="password" maxlength="8"
+								size="15" required="true" requiredMessage="Senha é obrigatório"
+								value="#{autenticacaoBean.usuario.senha}" ajax="true"
+								autocomplete="false" update=":mensagem">
+
+								<f:facet name="prepend">
+									<b:iconAwesome name="key" />
+								</f:facet>
+							</b:inputSecret>
+						</b:column>
+					</b:row>
+					<b:row>
+						<b:column>
+							<b:commandButton value="Login" iconAwesome="sign-in"
+								actionListener="#{autenticacaoBean.autenticar}"
+								update=":mensagem" look="primary" style="width:100%" />
+						</b:column>
+					</b:row>
+				</b:panel>
+			</b:column>
+		</b:row>
+	</h:form>
+</ui:composition>

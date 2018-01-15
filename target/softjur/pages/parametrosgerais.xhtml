@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+	<h:form id="formCadParametro">
+		<b:growl id="msgParametro" />
+		<b:panel id="painelCadParametro" look="primary"
+			title="Parâmetros Gerais" collapsible="false">
+			<b:column span="4" contentDisabled="false">
+				<b:inputText required="true" maxlength="500"
+					requiredMessage="'Path Upload' é obrigatório."
+					value="#{parametrosGeraisBean.parametro.pathUpload}"
+					label="Path Upload" />
+				<b:inputText required="true" maxlength="500"
+					requiredMessage="'Path Arquivo' é obrigatório."
+					value="#{parametrosGeraisBean.parametro.pathArquivo}"
+					label="Path Arquivo" />
+			</b:column>
+			<b:column span="4" contentDisabled="false">
+				<h:outputText
+					value="Servidor: /var/lib/tomcat8/webapps/softjur/resources/upload/" />
+				<p></p>
+				<h:outputText
+					value="Local: D:\\Desenvolvimento\\Workspace\\softjur\\src\\main\\webapp\\resources\\upload\\" />
+				<p></p>
+				<h:outputText
+					value="Servidor: ../resources/upload/" />
+				<p></p>
+				<h:outputText value="Local: ../resources/upload/" />
+			</b:column>
+			<f:facet name="footer">
+				<b:commandButton value="Salvar" ajax="true" look="primary"
+					update=":formCadParametro:msgParametro" icon="save"
+					actionListener="#{parametrosGeraisBean.salvar}" size="xs" />
+			</f:facet>
+		</b:panel>
+	</h:form>
+</ui:composition>

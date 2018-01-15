@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+	<h:form id="formStatus">
+		<b:row>
+			<b:column>
+				<b:panel id="painelStatus" look="primary" title="Status"
+					collapsible="false">
+					<b:commandButton value="Novo" ajax="true" look="primary"
+						actionListener="#{statusBean.novo}" icon="file" size="xs"
+						update=":mensagem :formCadStatus:msgStatus :formCadStatus:painelCadStatus"
+						oncomplete="$('.responsiveModalPseudoClass').modal();">
+						<f:actionListener
+							type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</b:commandButton>
+					<p />
+					<b:dataTable value="#{statusBean.statuss}" var="status"
+						customLangUrl="#{resource['/tradutor/pt-br.json']}"
+						responsive="true" scroll-size="400px" scroll-x="false">
+						<b:dataTableColumn label="Nome" value="#{status.nome}" />
+						<b:dataTableColumn label="Descrição" value="#{status.descricao}" />
+						<b:dataTableColumn label="Label">
+							<b:label text="#{status.nome}" severity="#{status.label}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Ativo" value="#{status.ativoFormatado}" />
+						<b:dataTableColumn label="Visão Geral"
+							value="#{status.visaoGeralFormatado}" />
+						<b:dataTableColumn label="Visão Correspondente"
+							value="#{status.visaoCorrespondenteFormatado}" />
+						<b:dataTableColumn label="Opções">
+							<b:commandButton icon="edit" ajax="true" look="primary"
+								actionListener="#{statusBean.editar}" size="xs"
+								update=":mensagem :formCadStatus:msgStatus :formCadStatus:painelCadStatus"
+								oncomplete="$('.responsiveModalPseudoClass').modal();">
+								<f:attribute value="#{status}" name="statusSelecionado" />
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</b:commandButton>
+
+							<h:outputText value="   " />
+
+							<b:commandButton icon="trash" ajax="true" look="danger"
+								actionListener="#{statusBean.excluir}" size="xs"
+								onclick="return confirm('Confirma a exclusão? ');"
+								update=":mensagem :formCadStatus:msgStatus :formCadStatus:painelCadStatus :formStatus:painelStatus">
+								<f:attribute value="#{status}" name="statusSelecionado" />
+							</b:commandButton>
+
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:panel>
+			</b:column>
+		</b:row>
+	</h:form>
+	<b:modal id="modalStatus" title="Status" closeOnEscape="true"
+		styleClass="responsiveModalPseudoClass" backdrop="false">
+		<h:form id="formCadStatus">
+			<b:messages id="msgStatus" />
+			<b:panel id="painelCadStatus" look="primary" title="Status"
+				collapsible="false">
+				<b:column contentDisabled="false" span="6">
+					<b:inputText required="true" maxlength="50"
+						requiredMessage="'Nome' é obrigatório." label="Nome"
+						value="#{statusBean.status.nome}" />
+					<b:inputTextarea required="true" maxlength="200" label="Descrição"
+						requiredMessage="'Descrição' é obrigatório."
+						value="#{statusBean.status.descricao}" />
+					<b:selectOneMenu id="tipo" value="#{statusBean.status.label}"
+						label="Label" required="true"
+						requiredMessage="'Label' é obrigatório">
+						<f:selectItem itemValue="info" itemLabel="Azul claro" />
+						<f:selectItem itemValue="primary" itemLabel="Azul escuro" />
+						<f:selectItem itemValue="warning" itemLabel="Laranja" />
+						<f:selectItem itemValue="success" itemLabel="Verde" />
+						<f:selectItem itemValue="danger" itemLabel="Vermelho" />
+					</b:selectOneMenu>
+				</b:column>
+				<b:column contentDisabled="false" span="6">
+					<b:selectBooleanCheckbox id="ativo" label="Ativo"
+						value="#{statusBean.status.ativo}" />
+					<b:selectBooleanCheckbox id="visaogeral" label="Visão Geral"
+						value="#{statusBean.status.visaoGeral}" />
+					<b:selectBooleanCheckbox id="visaocorrespondente"
+						label="Visão Correspondente"
+						value="#{statusBean.status.visaoCorrespondente}" />
+				</b:column>
+				<f:facet name="footer">
+					<b:commandButton value="Salvar" ajax="true" look="primary"
+						icon="save" actionListener="#{statusBean.salvar}" size="xs"
+						update=":formStatus:painelStatus :formCadStatus:painelCadStatus :formCadStatus:msgStatus" />
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+
+
+
+</ui:composition>

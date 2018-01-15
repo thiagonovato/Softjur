@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+	<h:form id="formUpload">
+		<b:row>
+			<b:column>
+				<b:panel id="painelUpload" look="primary" title="Uploads"
+					collapsible="false">
+					<b:commandButton value="Upload" ajax="true" look="primary"
+						actionListener="#{uploadBean.novo}" icon="cloud-upload" size="xs"
+						update=":mensagem :formCadUpload:msgUpload :formCadUpload:painelCadUpload"
+						oncomplete="$('.responsiveModalPseudoClass').modal();">
+						<f:actionListener
+							type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</b:commandButton>
+					<p />
+					<b:dataTable value="#{uploadBean.uploads}" var="upload"
+						customLangUrl="#{resource['/tradutor/pt-br.json']}"
+						responsive="true" scroll-size="400px" scroll-x="false">
+						<b:dataTableColumn label="Nome" value="#{upload.nome}" />
+						<b:dataTableColumn label="Data de Cadastro"
+							orderBy="#{upload.dataCadastro}">
+							<h:outputText value="#{upload.dataCadastro}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+							</h:outputText>
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Opções">
+							<b:commandButton iconAwesome="eye" ajax="true" look="success"
+								actionListener="#{uploadBean.listarExcel}" size="xs"
+								update=":mensagem :tabExcel:formCadExcel:painelCadExcel :tabErros:formCadExcelErros:painelCadExcelErros :tabDuplicados:formCadExcelDuplicados:painelCadExcelDuplicados"
+								oncomplete="$('.responsiveModalPseudoClassExcel').modal();">
+								<f:attribute value="#{upload}" name="arquivoSelecionado" />
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</b:commandButton>
+
+							<h:outputText value="   " />
+
+							<b:commandButton icon="trash" ajax="true" look="danger"
+								actionListener="#{uploadBean.excluir}" size="xs"
+								onclick="return confirm('Confirma a exclusão? ');"
+								update=":mensagem :formCadUpload:msgUpload :formCadUpload:painelCadUpload :formUpload:painelUpload">
+								<f:attribute value="#{upload}" name="arquivoSelecionado" />
+							</b:commandButton>
+
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:panel>
+			</b:column>
+		</b:row>
+	</h:form>
+	<b:modal id="modalUpload" title="Upload" closeOnEscape="true"
+		styleClass="responsiveModalPseudoClass" backdrop="false"
+		size="modal-lg">
+		<h:form id="formCadUpload" enctype="multipart/form-data">
+			<b:messages id="msgUpload" />
+			<b:panel id="painelCadUpload" look="primary" title="Upload"
+				collapsible="false">
+				<b:column contentDisabled="false">
+					<h:inputFile id="arquivo" value="#{uploadBean.arquivo}"
+						required="true" requiredMessage="'Arquivo' é obrigatório."
+						label="Arquivo" />
+				</b:column>
+
+				<f:facet name="footer">
+					<b:commandButton value="Importar" ajax="true" look="primary"
+						icon="save" actionListener="#{uploadBean.salvar}" size="xs"
+						update=":formUpload:painelUpload :formCadUpload:painelCadUpload :formCadUpload:msgUpload" />
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+	<b:modal id="modalExcel" title="Excel" size="modal-lg"
+		styleClass="responsiveModalPseudoClassExcel" backdrop="false">
+		<b:tabView>
+			<b:tab title="Planilha" id="tabExcel">
+				<h:form id="formCadExcel">
+					<b:panel id="painelCadExcel" look="primary" title="Excel"
+						collapsible="false">
+						<b:dataTable value="#{uploadBean.itensExcel}" var="excel"
+							customLangUrl="#{resource['/tradutor/pt-br.json']}"
+							responsive="true" scroll-size="400px" scroll-x="false">
+							<b:dataTableColumn label="Linha" value="#{excel.linha}" />
+							<b:dataTableColumn label="Correspondente"
+								value="#{excel.coluna1}" />
+							<b:dataTableColumn label="Dia" value="#{excel.coluna2}" />
+							<b:dataTableColumn label="Hora" value="#{excel.coluna3}" />
+							<b:dataTableColumn label="Nº" value="#{excel.coluna4}" />
+							<b:dataTableColumn label="Órgão" value="#{excel.coluna5}" />
+							<b:dataTableColumn label="Comarca" value="#{excel.coluna6}" />
+							<b:dataTableColumn label="Estado" value="#{excel.coluna7}" />
+							<b:dataTableColumn label="Processo" value="#{excel.coluna8}" />
+							<b:dataTableColumn label="Nº Interno" value="#{excel.coluna9}" />
+							<b:dataTableColumn label="Nº Consluta" value="#{excel.coluna10}" />
+							<b:dataTableColumn label="Autor" value="#{excel.coluna11}" />
+							<b:dataTableColumn label="Empresa" value="#{excel.coluna12}" />
+							<b:dataTableColumn label="Tipo de Audiência"
+								value="#{excel.coluna13}" />
+							<b:dataTableColumn label="Acordo" value="#{excel.coluna14}" />
+							<b:dataTableColumn label="Escritório" value="#{excel.coluna15}" />
+						</b:dataTable>
+						<f:facet name="footer">
+							<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+							<h:outputText value="   " />
+							<b:commandButton value="Atualizar" ajax="true" look="primary"
+								icon="refresh" size="xs"
+								update=":mensagem :tabExcel:formCadExcel:painelCadExcel :tabErros:formCadExcelErros:painelCadExcelErros">
+							</b:commandButton>
+						</f:facet>
+					</b:panel>
+				</h:form>
+			</b:tab>
+			<b:tab title="Erros" id="tabErros">
+				<h:form id="formCadExcelErros">
+					<b:panel id="painelCadExcelErros" look="primary"
+						title="Erros - #{uploadBean.itensErros.size()}"
+						collapsible="false">
+						<b:dataTable value="#{uploadBean.itensErros}" var="erros"
+							customLangUrl="#{resource['/tradutor/pt-br.json']}"
+							responsive="true" scroll-size="400px" scroll-x="false">
+							<b:dataTableColumn label="Linha" value="#{erros.linha}" />
+							<b:dataTableColumn label="Erros" value="#{erros.nome}" />
+						</b:dataTable>
+						<f:facet name="footer">
+							<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+							<h:outputText value="   " />
+							<b:commandButton value="Atualizar" ajax="true" look="primary"
+								icon="refresh" size="xs"
+								update=":mensagem :tabExcel:formCadExcel:painelCadExcel :tabErros:formCadExcelErros:painelCadExcelErros">
+							</b:commandButton>
+						</f:facet>
+					</b:panel>
+				</h:form>
+			</b:tab>
+
+
+			<b:tab title="Duplicados" id="tabDuplicados">
+				<h:form id="formCadExcelDuplicados">
+					<b:panel id="painelCadExcelDuplicados" look="primary"
+						title="Duplicados - #{uploadBean.itensDuplicados.size()}"
+						collapsible="false">
+						<b:dataTable value="#{uploadBean.itensDuplicados}"
+							var="duplicados"
+							customLangUrl="#{resource['/tradutor/pt-br.json']}"
+							responsive="true" scroll-size="400px" scroll-x="false">
+							<b:dataTableColumn label="Linha" value="#{duplicados.linha}" />
+							<b:dataTableColumn label="Duplicados" value="#{duplicados.nome}" />
+						</b:dataTable>
+						<f:facet name="footer">
+							<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+							<h:outputText value="   " />
+							<b:commandButton value="Atualizar" ajax="true" look="primary"
+								icon="refresh" size="xs"
+								update=":mensagem :tabExcel:formCadExcel:painelCadExcel :tabDuplicados:formCadExcelDuplicados:painelCadExcelDuplicados">
+							</b:commandButton>
+						</f:facet>
+					</b:panel>
+				</h:form>
+			</b:tab>
+
+		</b:tabView>
+
+	</b:modal>
+
+
+
+</ui:composition>

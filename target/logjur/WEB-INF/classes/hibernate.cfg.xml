@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+
+		<!-- Configurações das conexões -->
+		<property name="connection.driver_class">org.postgresql.Driver</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5432/logjur</property>
+		<property name="connection.username">postgres</property>
+		<property name="connection.password">54e8aefg</property>
+
+		<!-- Pool de conexões -->
+		<property name="connection.pool_size">1</property>
+
+		<!-- SQL Dialect -->
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+		<!-- Gerenciamento da sessão -->
+		<property name="current_session_context_class">thread</property>
+
+		<!-- Desabilita cache -->
+		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+		<!-- Exibir os comandos SQL -->
+		<property name="show_sql">false</property>
+
+		<!-- Tirar mensagem de erro que não sei o que é -->
+		<property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
+
+		<!-- Cria as tabelas -->
+<!-- 		<property name="hbm2ddl.auto">create</property> -->
+<!-- 		<property name="hbm2ddl.auto">update</property> -->
+		<property name="hbm2ddl.auto">validate</property>
+
+		<property name="hibernate.default_schema">public</property>
+		
+		<!-- Mapeamento das entidades -->
+		<mapping class="com.logusit.logjur.domain.Audiencia" />
+		<mapping class="com.logusit.logjur.domain.AudienciaHistorico" />
+		<mapping class="com.logusit.logjur.domain.Banco" />
+		<mapping class="com.logusit.logjur.domain.Cidade" />
+		<mapping class="com.logusit.logjur.domain.Correspondente" />
+		<mapping class="com.logusit.logjur.domain.Empresa" />
+		<mapping class="com.logusit.logjur.domain.Escritorio" />
+		<mapping class="com.logusit.logjur.domain.Estado" />
+		<mapping class="com.logusit.logjur.domain.Orgao" />
+		<mapping class="com.logusit.logjur.domain.PaginasPermissao" />
+		<mapping class="com.logusit.logjur.domain.ParametrosGerais" />
+		<mapping class="com.logusit.logjur.domain.Pessoa" />
+		<mapping class="com.logusit.logjur.domain.Status" />
+		<mapping class="com.logusit.logjur.domain.TipoAudiencia" />
+		<mapping class="com.logusit.logjur.domain.Upload" />
+		<mapping class="com.logusit.logjur.domain.Usuario" />
+		
+	</session-factory>
+
+</hibernate-configuration>

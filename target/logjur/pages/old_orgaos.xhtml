@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets" template="template.xhtml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:tb="http://xmlns.jcp.org/jsf/composite/tbcomp"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<div style="height: 100%">
+		<h:form id="formListagem">
+			<p:panel header="Órgãos">
+				<p:dataTable id="tabela" emptyMessage="Nenhum registro encontrado."
+					paginator="true" value="#{orgaoBean.orgaos}"
+					var="orgao" rows="5">
+					<f:facet name="header">
+						<p:commandButton value="Novo"
+							actionListener="#{orgaoBean.novo}"
+							oncomplete="PF('dialogo').show();"
+							update=":mensagem :formCadastro:painel :formCadastro:painel2">
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+					</f:facet>
+
+					<p:column headerText="Nome resumido"
+						filterBy="#{orgao.nomeResumido}" filterMatchMode="contains"
+						sortBy="#{orgao.nomeResumido}">
+						<h:outputText value="#{orgao.nomeResumido}" />
+					</p:column>
+
+					<p:column headerText="Nome completo"
+						filterBy="#{orgao.nomeCompleto}" filterMatchMode="contains"
+						sortBy="#{orgao.nomeCompleto}">
+						<h:outputText value="#{orgao.nomeCompleto}" />
+					</p:column>
+
+					<p:column headerText="Cidade" filterBy="#{orgao.cidade.nome}"
+						filterMatchMode="contains" sortBy="#{orgao.cidade.nome}">
+						<h:outputText value="#{orgao.cidade.nome}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+						<p:commandButton icon="ui-icon-pencil"
+							actionListener="#{orgaoBean.editar}"
+							update=":mensagem :formCadastro:painel :formCadastro:painel2"
+							oncomplete="PF('dialogo').show();">
+							<f:attribute name="orgaoSelecionado" value="#{orgao}" />
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+
+						<p:commandButton icon="ui-icon-trash"
+							actionListener="#{orgaoBean.excluir}"
+							update=":mensagem :formListagem:tabela">
+							<p:confirm header="Confirmação" message="Deseja excluir o órgão?"
+								icon="ui-icon-alert" />
+							<f:attribute name="orgaoSelecionado" value="#{orgao}" />
+						</p:commandButton>
+
+					</p:column>
+				</p:dataTable>
+
+				<p:confirmDialog global="true">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</p:panel>
+		</h:form>
+
+		<p:dialog header="Órgãos - Cadastro" widgetVar="dialogo"
+			draggable="false" resizable="false" modal="true" closable="false">
+			<h:form id="formCadastro">
+				<p:fieldset legend="Dados Gerais">
+					<h:panelGrid id="painel" columns="2">
+						<p:outputLabel for="nomecompleto" value="Nome:" />
+						<p:inputText id="nomecompleto" maxlength="200" size="40"
+							value="#{orgaoBean.orgao.nomeCompleto}" required="true"
+							requiredMessage="O campo 'Nome completo' é obrigatório" />
+
+						<p:outputLabel for="nomeresumido" value="Nome resumido:" />
+						<p:inputText id="nomeresumido" maxlength="200" size="40"
+							value="#{orgaoBean.orgao.nomeResumido}" required="true"
+							requiredMessage="O campo 'Nome resumido' é obrigatório" />
+					</h:panelGrid>
+				</p:fieldset>
+				<p:separator></p:separator>
+				<p:fieldset legend="Endereço">
+					<h:panelGrid id="painel2" columns="2">
+						<p:outputLabel for="estado" value="Estado:" />
+						<p:selectOneMenu id="estado" filter="true"
+							filterMatchMode="contains"
+							converter="omnifaces.SelectItemsConverter"
+							value="#{orgaoBean.estado}">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione um estado" />
+							<f:selectItems value="#{orgaoBean.estados}" var="estado"
+								itemValue="#{estado}" itemLabel="#{estado.nome}" />
+							<p:ajax listener="#{orgaoBean.popular}"
+								update=":formCadastro:cidade" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="cidade" value="Cidade:" />
+						<p:selectOneMenu id="cidade" filter="true" required="true"
+							filterMatchMode="contains"
+							requiredMessage="O campo 'Cidade' é obrigatório"
+							converter="omnifaces.SelectItemsConverter"
+							value="#{orgaoBean.orgao.cidade}">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione uma cidade" />
+							<f:selectItems value="#{orgaoBean.cidades}" var="cidade"
+								itemValue="#{cidade}" itemLabel="#{cidade.nome}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:fieldset>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar"
+						actionListener="#{orgaoBean.salvar}"
+						update=":mensagem :formCadastro:painel :formCadastro:painel2 :formListagem:tabela" />
+					<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</div>
+</ui:composition>
+

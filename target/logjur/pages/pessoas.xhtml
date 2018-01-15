@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+	<h:form id="formPessoa">
+		<b:row>
+			<b:column>
+				<b:panel id="painelPessoa" look="primary" title="Pessoas"
+					collapsible="false">
+					<b:commandButton value="Novo" ajax="true" look="primary"
+						actionListener="#{pessoaBean.novo}" icon="file" size="xs"
+						update=":mensagem :formCadPessoa:msgPessoa :formCadPessoa:painelCadPessoa"
+						oncomplete="$('.responsiveModalPseudoClass').modal();">
+						<f:actionListener
+							type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</b:commandButton>
+					<p />
+					<b:dataTable value="#{pessoaBean.pessoas}" var="pessoa"
+						customLangUrl="#{resource['/tradutor/pt-br.json']}"
+						responsive="true" scroll-size="400px" scroll-x="false">
+						<b:dataTableColumn label="Nome" value="#{pessoa.nome}" />
+						<b:dataTableColumn label="CPF" value="#{pessoa.cpf}" />
+						<b:dataTableColumn label="E-mail" value="#{pessoa.email}" />
+						<b:dataTableColumn label="Telefone"
+							value="#{pessoa.telefone} - #{pessoa.celular}" />
+						<b:dataTableColumn label="Opções">
+							<b:commandButton icon="edit" ajax="true" look="primary"
+								actionListener="#{pessoaBean.editar}" size="xs"
+								update=":mensagem :formCadPessoa:msgPessoa :formCadPessoa:painelCadPessoa"
+								oncomplete="$('.responsiveModalPseudoClass').modal();">
+								<f:attribute value="#{pessoa}" name="pessoaSelecionada" />
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</b:commandButton>
+
+							<h:outputText value="   " />
+
+							<b:commandButton icon="trash" ajax="true" look="danger"
+								actionListener="#{pessoaBean.excluir}" size="xs"
+								onclick="return confirm('Confirma a exclusão? ');"
+								update=":mensagem :formCadPessoa:msgPessoa :formCadPessoa:painelCadPessoa :formPessoa:painelPessoa">
+								<f:attribute value="#{pessoa}" name="pessoaSelecionada" />
+							</b:commandButton>
+
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:panel>
+			</b:column>
+		</b:row>
+	</h:form>
+	<b:modal id="modalPessoa" title="Pessoas" closeOnEscape="true"
+		styleClass="responsiveModalPseudoClass" backdrop="false"
+		size="modal-lg">
+		<h:form id="formCadPessoa">
+			<b:messages id="msgPessoa" />
+			<b:panel id="painelCadPessoa" look="primary" title="Pessoas"
+				collapsible="false">
+				<b:column span="4" contentDisabled="false">
+					<b:inputText required="true" maxlength="150"
+						requiredMessage="'Nome' é obrigatório."
+						value="#{pessoaBean.pessoa.nome}" label="Nome" />
+					<b:inputText required="true" maxlength="50"
+						requiredMessage="'RG' é obrigatório."
+						value="#{pessoaBean.pessoa.rg}" label="RG" />
+					<b:inputText id="cpf" mask="999.999.999-99" required="true"
+						requiredMessage="CPF é obrigatório."
+						value="#{pessoaBean.pessoa.cpf}" placeholder="CPF">
+						<f:facet name="prepend">
+							<b:icon name="user" />
+						</f:facet>
+					</b:inputText>
+				</b:column>
+
+				<b:column span="4">
+					<b:selectOneMenu id="estado" filter="true"
+						filterMatchMode="contains"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{pessoaBean.estado}" label="Estado">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um estado" />
+						<f:selectItems value="#{pessoaBean.estados}" var="estado"
+							itemValue="#{estado}" itemLabel="#{estado.nome}" />
+						<f:ajax listener="#{pessoaBean.popular}" event="change"
+							render=":formCadPessoa:painelCadPessoa:cidadeUpdate" />
+					</b:selectOneMenu>
+					<b:selectOneMenu id="cidadeUpdate" filter="true" required="true"
+						filterMatchMode="contains" label="Cidade"
+						requiredMessage="O campo 'Cidade' é obrigatório"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{pessoaBean.pessoa.cidade}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma cidade" />
+						<f:selectItems value="#{pessoaBean.cidades}" var="cidade"
+							itemValue="#{cidade}" itemLabel="#{cidade.nome}" />
+					</b:selectOneMenu>
+					<b:inputText required="true" maxlength="100"
+						requiredMessage="'Rua' é obrigatório." label="Rua"
+						value="#{pessoaBean.pessoa.rua}" />
+					<b:inputText maxlength="100" label="Complemento"
+						value="#{pessoaBean.pessoa.complemento}" />
+					<b:inputText maxlength="5" value="#{pessoaBean.pessoa.numero}"
+						label="Número" required="true"
+						requiredMessage="O campo 'Número' é obrigatório"
+						converterMessage="Informe um valor válido para o campo 'Número'"
+						validatorMessage="Informe um valor entre 1 e 32767 para o campo 'Número'">
+						<f:validateLongRange minimum="1" maximum="32767" />
+					</b:inputText>
+					<b:inputText maxlength="30" required="true" label="Bairro"
+						requiredMessage="'Bairro' é obrigatório."
+						value="#{pessoaBean.pessoa.bairro}" />
+					<b:inputText required="true" mask="99.999-999"
+						requiredMessage="'CEP' é obrigatório."
+						value="#{pessoaBean.pessoa.cep}" label="CEP" />
+				</b:column>
+
+				<b:column span="4">
+					<b:inputText required="true" mask="(99)9999-9999"
+						requiredMessage="'Telefone' é obrigatório."
+						value="#{pessoaBean.pessoa.telefone}" label="Telefone" />
+					<b:inputText required="true" mask="(99)99999-9999"
+						requiredMessage="'Celular' é obrigatório."
+						value="#{pessoaBean.pessoa.celular}" label="Celular" />
+					<b:inputText required="true"
+						requiredMessage="'Email' é obrigatório."
+						value="#{pessoaBean.pessoa.email}" label="Email" />
+				</b:column>
+				<f:facet name="footer">
+					<b:commandButton value="Salvar" ajax="true" look="primary"
+						icon="save" actionListener="#{pessoaBean.salvar}" size="xs"
+						update=":formPessoa:painelPessoa :formCadPessoa:painelCadPessoa :formCadPessoa:msgPessoa" />
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+
+
+
+</ui:composition>

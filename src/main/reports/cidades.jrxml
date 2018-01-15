@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cidades" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfed37a8-90a7-4987-904d-bd4b3ebb8151">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Drogaria"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT public.cidade.nome as nome_cidade,
+	public.estado.nome as nome_estado,
+	public.estado.sigla as sigla_estado
+FROM public.cidade
+	INNER JOIN public.estado ON 
+	 public.cidade.estado_codigo = public.estado.codigo 
+ORDER BY public.cidade.nome DESC,
+	public.estado.nome DESC]]>
+	</queryString>
+	<field name="nome_cidade" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome_cidade"/>
+	</field>
+	<field name="nome_estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome_estado"/>
+	</field>
+	<field name="sigla_estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="sigla_estado"/>
+	</field>
+	<title>
+		<band height="61" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="280" height="50" uuid="53d35832-af7f-4a7f-9185-5007005b9450"/>
+				<imageExpression><![CDATA["src/main/webapp/resources/imagens/logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="23" width="550" height="30" uuid="57033283-f77d-410c-af8b-3ccfce755946"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Cidades]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="270" height="30" uuid="89b432fe-2db0-4e61-9fc8-d1664fe342d6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b79f2a37-8a0c-441d-827d-4b05f09ca296"/>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="200" height="30" uuid="4e9003d0-2dd6-43fd-9cce-f79f45545f6f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e3867870-254a-4f9e-b556-ae2e3275d7f8"/>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="490" y="0" width="60" height="30" uuid="77f0c084-c3a5-4da0-81ab-3d90ef1ed22f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="845822c4-8dfe-42c5-b79a-245ae1c9545c"/>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UF]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="270" height="30" uuid="1e369852-7980-4b18-88f8-c55d420b606b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b79f2a37-8a0c-441d-827d-4b05f09ca296"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_cidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="200" height="30" uuid="3b9440aa-f73d-42c7-8f00-a340465f2ee9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e3867870-254a-4f9e-b556-ae2e3275d7f8"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="490" y="0" width="60" height="30" uuid="a1e61e1f-6c58-4166-8527-07701753ebca">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="845822c4-8dfe-42c5-b79a-245ae1c9545c"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sigla_estado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="550" height="30" uuid="cfe0eeb2-cc84-45c1-8042-90f1c64a3b52"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Claudio Novato Logística Jurídica - www.claudionovato.com.br]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

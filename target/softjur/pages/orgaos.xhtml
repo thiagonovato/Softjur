@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+		<h:form id="formOrgao">
+			<b:row>
+				<b:column>
+					<b:panel id="painelOrgao" look="primary" title="Órgãos"
+						collapsible="false">
+						<b:commandButton value="Novo" ajax="true" look="primary"
+							actionListener="#{orgaoBean.novo}" icon="file" size="xs"
+							update=":mensagem :formCadOrgao:msgOrgao :formCadOrgao:painelCadOrgao"
+							oncomplete="$('.responsiveModalPseudoClass').modal();">
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</b:commandButton>
+						<p />
+						<b:dataTable value="#{orgaoBean.orgaos}" var="orgao"
+							customLangUrl="#{resource['/tradutor/pt-br.json']}"
+							responsive="true" scroll-size="400px" scroll-x="false">
+							<b:dataTableColumn label="Número" value="#{orgao.numero}" />
+							<b:dataTableColumn label="Nome"
+								value="#{orgao.nome}" />
+							<b:dataTableColumn label="Cidade"
+								value="#{orgao.cidade.nome} / #{orgao.cidade.estado.sigla}" />
+							<b:dataTableColumn label="Opções">
+								<b:commandButton icon="edit" ajax="true" look="primary"
+									actionListener="#{orgaoBean.editar}" size="xs"
+									update=":mensagem :formCadOrgao:msgOrgao :formCadOrgao:painelCadOrgao"
+									oncomplete="$('.responsiveModalPseudoClass').modal();">
+									<f:attribute value="#{orgao}" name="orgaoSelecionado" />
+									<f:actionListener
+										type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+								</b:commandButton>
+
+								<h:outputText value="   " />
+
+								<b:commandButton icon="trash" ajax="true" look="danger"
+									actionListener="#{orgaoBean.excluir}" size="xs"
+									onclick="return confirm('Confirma a exclusão? ');"
+									update=":mensagem :formCadOrgao:msgOrgao :formCadOrgao:painelCadOrgao :formOrgao:painelOrgao">
+									<f:attribute value="#{orgao}" name="orgaoSelecionado" />
+								</b:commandButton>
+
+							</b:dataTableColumn>
+						</b:dataTable>
+					</b:panel>
+				</b:column>
+			</b:row>
+		</h:form>
+	<b:modal id="modalOrgao" title="Órgãos"
+		styleClass="responsiveModalPseudoClass" backdrop="false"
+		size="modal-lg" closeOnEscape="true">
+		<h:form id="formCadOrgao">
+			<b:messages id="msgOrgao" />
+			<b:panel id="painelCadOrgao" look="primary" title="Órgãos"
+				collapsible="false">
+				<b:column span="6" contentDisabled="false">
+					<b:inputText required="true" maxlength="200"
+						requiredMessage="'Número' é obrigatório."
+						value="#{orgaoBean.orgao.numero}"
+						label="Número" />
+					<b:inputText required="true" maxlength="200"
+						requiredMessage="'Nome' é obrigatório."
+						value="#{orgaoBean.orgao.nome}"
+						label="Nome" />
+				</b:column>
+
+				<b:column span="6">
+					<b:selectOneMenu id="estado" filter="true"
+						filterMatchMode="contains"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{orgaoBean.estado}" label="Estado">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um estado" />
+						<f:selectItems value="#{orgaoBean.estados}" var="estado"
+							itemValue="#{estado}" itemLabel="#{estado.nome}" />
+						<f:ajax listener="#{orgaoBean.popular}" event="change"
+							render=":formCadOrgao:painelCadOrgao:cidadeUpdate" />
+					</b:selectOneMenu>
+					<b:selectOneMenu id="cidadeUpdate" filter="true" required="true"
+						filterMatchMode="contains" label="Cidade"
+						requiredMessage="O campo 'Cidade' é obrigatório"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{orgaoBean.orgao.cidade}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma cidade" />
+						<f:selectItems value="#{orgaoBean.cidades}" var="cidade"
+							itemValue="#{cidade}" itemLabel="#{cidade.nome}" />
+					</b:selectOneMenu>
+				</b:column>
+
+				<f:facet name="footer">
+					<b:commandButton value="Salvar" ajax="true" look="primary"
+						icon="save" actionListener="#{orgaoBean.salvar}" size="xs"
+						update=":formOrgao:painelOrgao :formCadOrgao:painelCadOrgao :formCadOrgao:msgOrgao" />
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+
+
+
+</ui:composition>

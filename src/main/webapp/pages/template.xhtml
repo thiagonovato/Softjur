@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<h:outputStylesheet library="css" name="estilos.css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Sistema</title>
+	<h:outputScript library="js" name="scripts.js" />
+</h:head>
+<h:body>
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false">
+		<h:graphicImage library="imagens" name="loading.gif" />
+	</p:dialog>
+	<p:growl id="mensagem" />
+	<h:panelGrid>
+		<h:graphicImage library="imagens" name="logo.jpg" />
+	</h:panelGrid>
+	<h:form>
+		<p:menubar>
+			<p:menuitem value="Home" icon="ui-icon-home"
+				url="/pages/principal.xhtml"></p:menuitem>
+			<p:submenu label="Audiências" icon="ui-icon-pencil">
+				<p:menuitem value="Gerenciar" url="/pages/audiencias.xhtml"
+					icon="ui-icon-pencil" />
+			</p:submenu>
+			<p:submenu label="Cadastros" icon="ui-icon-pencil">
+				<p:menuitem value="Pessoas" url="/pages/pessoas.xhtml"
+					icon="ui-icon-pencil" />
+				<p:menuitem value="Correspondentes"
+					url="/pages/correspondentes.xhtml" icon="ui-icon-pencil" />
+				<p:menuitem value="Escritórios" url="/pages/escritorios.xhtml"
+					icon="ui-icon-pencil" />
+				<p:menuitem value="Empresas" url="/pages/empresas.xhtml"
+					icon="ui-icon-pencil" />
+				<p:menuitem value="Órgãos" url="/pages/orgaos.xhtml"
+					icon="ui-icon-pencil" />
+				<p:menuitem value="Tipos de Audiência"
+					url="/pages/tiposaudiencia.xhtml" icon="ui-icon-pencil" />
+				<p:menuitem value="Status" url="/pages/status.xhtml"
+					icon="ui-icon-pencil" />
+				<p:menuitem value="Usuários" url="/pages/usuarios.xhtml"
+					icon="ui-icon-pencil" />
+			</p:submenu>
+			<p:submenu label="Configurações" icon="ui-icon-gear">
+				<p:submenu label="Locais" icon="ui-icon-pencil">
+					<p:menuitem value="Cidade" url="/pages/cidades.xhtml"
+						icon="ui-icon-pencil" />
+					<p:menuitem value="Estados" url="/pages/old_estados.xhtml"
+						icon="ui-icon-pencil" />
+				</p:submenu>
+				<p:menuitem value="Bancos" url="/pages/bancos.xhtml"
+					icon="ui-icon-pencil" />
+			</p:submenu>
+			<f:facet name="options">
+				<h:outputText
+					value="Usuário: #{autenticacaoBean.usuarioLogado.pessoa.nome}  " />
+				<p:commandButton value="Sair" action="#{autenticacaoBean.deslogar}" />
+			</f:facet>
+		</p:menubar>
+	</h:form>
+	<hr />
+	<ui:insert></ui:insert>
+</h:body>
+</html>
+

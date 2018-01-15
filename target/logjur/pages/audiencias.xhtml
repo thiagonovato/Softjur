@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+	<h:form id="formAudiencia">
+		<b:row>
+			<b:column>
+				<b:panel id="painelAudiencia" look="primary" title="Audiências"
+					collapsible="false" style="width:100%">
+					<b:commandButton value="Novo" ajax="true" look="primary"
+						actionListener="#{audienciaBean.novo}" icon="file" size="xs"
+						update=":mensagem :formCadAudiencia:msgAudiencia :formCadAudiencia:painelCadAudiencia"
+						oncomplete="$('.responsiveModalPseudoClass').modal();">
+						<f:actionListener
+							type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</b:commandButton>
+					<h:outputText value="   " />
+					<b:commandButton value="Atualizar" ajax="true" look="primary"
+						actionListener="#{audienciaBean.listar}" icon="refresh" size="xs"
+						update=":formAudiencia:painelAudiencia">
+					</b:commandButton>
+					<p />
+					<b:dataTable value="#{audienciaBean.audiencias}" var="audiencia"
+						customLangUrl="#{resource['/tradutor/pt-br.json']}"
+						multi-column-search="true" multi-column-search-position="top"
+						responsive="true" scroll-size="400px" scroll-x="false">
+						<b:dataTableColumn label="Data"
+							data-order="#{audiencia.dataRealizar}" order="desc">
+							<h:outputText value="#{audiencia.dataRealizar}">
+								<f:convertDateTime pattern="dd/MM/yyyy" timezone="GMT-3" />
+							</h:outputText>
+						</b:dataTableColumn>
+
+						<b:dataTableColumn label="Hora">
+							<h:outputText value="#{audiencia.horaRealizar}">
+								<f:convertDateTime pattern="HH:mm" timezone="GMT-3" />
+							</h:outputText>
+						</b:dataTableColumn>
+
+
+						<b:dataTableColumn label="Órgão"
+							value="#{audiencia.orgao.numero} #{audiencia.orgao.nome} - #{audiencia.orgao.cidade.nome}" />
+						<b:dataTableColumn label="Correspondente"
+							value="#{audiencia.correspondente.pessoa.nome}" />
+						<b:dataTableColumn label="Empresa"
+							value="#{audiencia.empresa.nomeResumido}" />
+						<b:dataTableColumn label="Escritório"
+							value="#{audiencia.escritorio.nomeResumido}" />
+						<b:dataTableColumn label="Tipo de Audiência"
+							value="#{audiencia.tipoAudiencia.nome}" />
+						<b:dataTableColumn label="Status">
+							<b:label text="#{audiencia.status.nome}"
+								severity="#{audiencia.status.label}" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="Número Processo"
+							value="#{audiencia.numeroProcesso}" />
+						<b:dataTableColumn label="Número Interno"
+							value="#{audiencia.numeroInterno}" />
+						<b:dataTableColumn label="Autor" value="#{audiencia.autor}" />
+						<b:dataTableColumn label="Opções">
+							<b:commandButton iconAwesome="pencil" ajax="true" look="primary"
+								actionListener="#{audienciaBean.editar}" size="xs"
+								update=":mensagem :formCadAudiencia:msgAudiencia :formCadAudiencia:painelCadAudiencia"
+								oncomplete="$('.responsiveModalPseudoClass').modal();">
+								<f:attribute value="#{audiencia}" name="audienciaSelecionada" />
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</b:commandButton>
+
+							<h:outputText value="   " />
+
+							<b:commandButton iconAwesome="legal" ajax="true" look="success"
+								actionListener="#{audienciaCorrespondenteBean.editar}" size="xs"
+								update=":mensagem :formCadAudienciaAndar:msgAudienciaAndar :formCadAudienciaAndar:painelCadAudienciaAndar"
+								oncomplete="$('.responsiveModalPseudoClassAndar').modal();">
+								<f:attribute value="#{audiencia}" name="audienciaSelecionada" />
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</b:commandButton>
+
+							<h:outputText value="   " />
+
+							<b:commandButton iconAwesome="trash-o" ajax="true" look="danger"
+								actionListener="#{audienciaBean.excluir}" size="xs"
+								onclick="return confirm('Confirma a exclusão? ');"
+								update=":mensagem :formCadAudiencia:msgAudiencia :formCadAudiencia:painelCadAudiencia :formAudiencia:painelAudiencia">
+								<f:attribute value="#{audiencia}" name="audienciaSelecionada" />
+							</b:commandButton>
+
+							<h:outputText value="   " />
+
+							<b:commandButton iconAwesome="bars" ajax="true" look="info"
+								actionListener="#{audienciaBean.listarHistorico}" size="xs"
+								update=":mensagem :formCadHistorico:painelCadHistorico"
+								oncomplete="$('.responsiveModalPseudoClassHistorico').modal();">
+								<f:attribute value="#{audiencia}" name="audienciaSelecionada" />
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</b:commandButton>
+
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:panel>
+			</b:column>
+		</b:row>
+	</h:form>
+	<b:modal id="modalAudiencia" title="Audiencia"
+		styleClass="responsiveModalPseudoClass" backdrop="false"
+		size="modal-lg" closeOnEscape="true">
+		<h:form id="formCadAudiencia">
+			<b:messages id="msgAudiencia" />
+			<b:panel id="painelCadAudiencia" look="primary" title="Audiência"
+				collapsible="false">
+				<b:column span="4">
+					<b:dateTimePicker id="data" required="true"
+						requiredMessage="'Data' é obrigatório" allowInputToggle="true"
+						label="Data" format="DD/MM/YYYY" icon-position="left"
+						value="#{audienciaBean.audiencia.dataRealizar}" />
+					<b:dateTimePicker id="hora" required="true"
+						requiredMessage="'Hora' é obrigatório" allowInputToggle="true"
+						label="Hora" format="HH:mm" icon-position="left"
+						value="#{audienciaBean.audiencia.horaRealizar}" />
+					<b:selectOneMenu id="orgao" filter="true"
+						filterMatchMode="contains" label="Órgão"
+						value="#{audienciaBean.audiencia.orgao}" required="true"
+						requiredMessage="'Órgão' é obrigatório"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um órgão" />
+						<f:selectItems value="#{audienciaBean.orgaos}" var="orgao"
+							itemValue="#{orgao}"
+							itemLabel="#{orgao.numero} #{orgao.nome} - #{orgao.cidade.nome}" />
+					</b:selectOneMenu>
+					<b:selectOneMenu id="tipoAudiencia" filter="true"
+						filterMatchMode="contains" label="Tipo de Audiência"
+						value="#{audienciaBean.audiencia.tipoAudiencia}" required="true"
+						requiredMessage="'Tipo de Audiência' é obrigatório"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um tipo de audiência." />
+						<f:selectItems value="#{audienciaBean.tiposAudiencia}"
+							var="tipoAudiencia" itemValue="#{tipoAudiencia}"
+							itemLabel="#{tipoAudiencia.nome}" />
+					</b:selectOneMenu>
+					<b:selectOneMenu id="status" filter="true"
+						filterMatchMode="contains" label="Status"
+						value="#{audienciaBean.audiencia.status}" required="true"
+						requiredMessage="'Status' é obrigatório"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um status" />
+						<f:selectItems value="#{audienciaBean.statuss}" var="status"
+							itemValue="#{status}" itemLabel="#{status.nome}" />
+					</b:selectOneMenu>
+				</b:column>
+
+				<b:column span="4">
+					<b:selectOneMenu id="empresa" filter="true"
+						filterMatchMode="contains" label="Empresa"
+						value="#{audienciaBean.audiencia.empresa}" required="true"
+						requiredMessage="'Empresa' é obrigatório"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione uma empresa" />
+						<f:selectItems value="#{audienciaBean.empresas}" var="empresa"
+							itemValue="#{empresa}" itemLabel="#{empresa.nomeResumido}" />
+					</b:selectOneMenu>
+					<b:selectOneMenu id="escritorio" filter="true"
+						filterMatchMode="contains" label="Escritório"
+						value="#{audienciaBean.audiencia.escritorio}" required="true"
+						requiredMessage="'Escritório' é obrigatório"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um escritório" />
+						<f:selectItems value="#{audienciaBean.escritorios}"
+							var="escritorio" itemValue="#{escritorio}"
+							itemLabel="#{escritorio.nomeResumido}" />
+					</b:selectOneMenu>
+					<b:selectOneMenu id="corr" filter="true" filterMatchMode="contains"
+						label="Correspondente"
+						value="#{audienciaBean.audiencia.correspondente}" required="true"
+						requiredMessage="'Correspondente' é obrigatório"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um correspondente" />
+						<f:selectItems value="#{audienciaBean.correspondentes}" var="corr"
+							itemValue="#{corr}"
+							itemLabel="#{corr.pessoa.nome} - #{corr.pessoa.cpf}" />
+						<f:facet name="append">
+							<b:commandButton ajax="true" look="primary"
+								id="btnCorrespondente"
+								actionListener="#{audienciaBean.listarCorrespondente}"
+								icon="refresh" size="sm"
+								update=":formCadAudiencia:painelCadAudiencia:corr" />
+						</f:facet>
+					</b:selectOneMenu>
+				</b:column>
+
+				<b:column span="4">
+					<b:inputText maxlength="100" label="Número do Processo"
+						value="#{audienciaBean.audiencia.numeroProcesso}" />
+					<b:inputText maxlength="100" label="Número Interno"
+						value="#{audienciaBean.audiencia.numeroInterno}" />
+					<b:inputText maxlength="100" label="Autor"
+						value="#{audienciaBean.audiencia.autor}" />
+				</b:column>
+				<f:facet name="footer">
+					<b:commandButton value="Salvar" ajax="true" look="primary"
+						icon="save" actionListener="#{audienciaBean.salvar}" size="xs"
+						update=":formAudiencia:painelAudiencia :formCadAudiencia:painelCadAudiencia :formCadAudiencia:msgAudiencia" />
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+
+	<b:modal id="modalAudienciaAndar" title="Audiencia"
+		styleClass="responsiveModalPseudoClassAndar" backdrop="false"
+		size="modal-lg" closeOnEscape="true">
+		<h:form id="formCadAudienciaAndar" enctype="multipart/form-data">
+			<b:messages id="msgAudienciaAndar" />
+			<b:panel id="painelCadAudienciaAndar" look="primary"
+				title="Audiência" collapsible="false">
+
+				<b:column>
+					<b:selectOneMenu id="status" filter="true"
+						filterMatchMode="contains" label="A audiência foi..."
+						value="#{audienciaCorrespondenteBean.audiencia.status}"
+						required="true" requiredMessage="'Status' é obrigatório"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Selecione um status" />
+						<f:selectItems value="#{audienciaCorrespondenteBean.statuss}"
+							var="status" itemValue="#{status}" itemLabel="#{status.nome}" />
+						<f:ajax event="change"
+							listener="#{audienciaCorrespondenteBean.novaSituacao}"
+							render=":formCadAudienciaAndar:painelCadAudienciaAndar" />
+					</b:selectOneMenu>
+
+					<h:outputText value="Selecione o arquivo"
+						style="font-weight: bold;"
+						rendered="#{audienciaCorrespondenteBean.ativatelaArquivo}" />
+					<b:column contentDisabled="false">
+
+
+						<h:inputFile id="arquivo"
+							value="#{audienciaCorrespondenteBean.arquivo}" label="Arquivo"
+							rendered="#{audienciaCorrespondenteBean.ativatelaArquivo}"
+							required="#{audienciaCorrespondenteBean.ativatelaArquivo}"
+							requiredMessage="'Aquivo' é obrigatório" />
+					</b:column>
+
+					<b:inputTextarea label="Observações"
+						value="#{audienciaCorrespondenteBean.observacaoHistorico}"
+						rendered="#{audienciaCorrespondenteBean.ativaTelaObs}"
+						required="#{audienciaCorrespondenteBean.ativaTelaObs}" />
+				</b:column>
+
+				<f:facet name="footer">
+					<b:commandButton value="Salvar" ajax="true" look="primary"
+						icon="save" actionListener="#{audienciaCorrespondenteBean.salvar}"
+						size="xs"
+						update=":formAudiencia:painelAudiencia :formCadAudienciaAndar:msgAudienciaAndar :formCadAudienciaAndar:painelCadAudienciaAndar" />
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+
+	<b:modal id="modalHistorico" title="Histórico" size="modal-lg"
+		styleClass="responsiveModalPseudoClassHistorico" backdrop="false">
+		<h:form id="formCadHistorico">
+			<b:panel id="painelCadHistorico" look="primary"
+				title="Histórico - #{audienciaBean.audienciasHistorico.size()}"
+				collapsible="false">
+				<b:dataTable value="#{audienciaBean.audienciasHistorico}"
+					var="historico" customLangUrl="#{resource['/tradutor/pt-br.json']}"
+					responsive="true" scroll-size="400px" scroll-x="false">
+					<b:dataTableColumn label="Lançamento"
+						data-order="#{historico.dataCadastro}" order="asc">
+						<h:outputText value="#{historico.dataCadastro}">
+							<f:convertDateTime pattern="dd/MM/yyyy - HH:mm" timezone="GMT-3" />
+						</h:outputText>
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Status">
+						<b:label text="#{historico.status.nome}"
+							severity="#{historico.status.label}" />
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Observação"
+						value="#{historico.observacao}" />
+					<b:dataTableColumn label="Arquivo"
+						value="#{historico.arquivoUpload != null ? 'Tem':'Não tem'}">
+						<a href="#{audienciaBean.pathArquivo}#{historico.arquivoUpload}"
+							target="_blank">arquivo</a>
+					</b:dataTableColumn>
+					<b:dataTableColumn label="Alterado por" value="#{historico.login}" />
+				</b:dataTable>
+				<f:facet name="footer">
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+					<h:outputText value="   " />
+					<b:commandButton value="Atualizar" ajax="true" look="primary"
+						icon="refresh" size="xs"
+						update=":mensagem :formCadHistorico:painelCadHistorico">
+					</b:commandButton>
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+</ui:composition>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="modeloautenticado.xhtml">
+	<h:form id="formPerm">
+		<b:row>
+			<b:column>
+				<b:panel id="painelPerm" look="primary" title="Permissões"
+					collapsible="false">
+					<b:commandButton value="Novo" ajax="true" look="primary"
+						actionListener="#{paginasPermissaoBean.novo}" icon="file"
+						size="xs" disabled="false"
+						update=":mensagem :formCadPerm:msgPerm :formCadPerm:painelCadPerm"
+						oncomplete="$('.responsiveModalPseudoClass').modal();">
+						<f:actionListener
+							type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+					</b:commandButton>
+					<p />
+					<b:dataTable value="#{paginasPermissaoBean.paginaspermissaos}"
+						var="permissao"
+						customLangUrl="#{resource['/tradutor/pt-br.json']}"
+						responsive="true" scroll-size="400px" scroll-x="false">
+						<b:dataTableColumn label="Nome" value="#{permissao.nome}" />
+						<b:dataTableColumn label="Tipo permitido"
+							value="#{permissao.perfilPermitido}" />
+						<b:dataTableColumn label="Ativo"
+							value="#{permissao.ativoFormatado}" />
+						<b:dataTableColumn label="Opções">
+							<b:commandButton icon="edit" ajax="true" look="primary"
+								actionListener="#{paginasPermissaoBean.editar}" size="xs"
+								update=":mensagem :formCadPerm:msgPerm :formCadPerm:painelCadPerm"
+								oncomplete="$('.responsiveModalPseudoClass').modal();">
+								<f:attribute value="#{permissao}" name="permissaoSelecionada" />
+								<f:actionListener
+									type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</b:commandButton>
+
+							<h:outputText value="   " />
+
+							<b:commandButton icon="trash" ajax="true" look="danger"
+								disabled="true" actionListener="#{paginasPermissaoBean.excluir}"
+								size="xs" onclick="return confirm('Confirma a exclusão? ');"
+								update=":mensagem :formCadPerm:msgPerm :formCadPerm:painelCadPerm :formPerm:painelPerm">
+								<f:attribute value="#{permissao}" name="permissaoSelecionada" />
+							</b:commandButton>
+
+						</b:dataTableColumn>
+					</b:dataTable>
+				</b:panel>
+			</b:column>
+		</b:row>
+	</h:form>
+	<b:modal id="modalPerm" title="Permissões" closeOnEscape="true"
+		styleClass="responsiveModalPseudoClass" backdrop="false">
+		<h:form id="formCadPerm">
+			<b:messages id="msgPerm" />
+			<b:panel id="painelCadPerm" look="primary" title="Permissões"
+				collapsible="false">
+				<b:row>
+					<b:column>
+						<b:inputText required="true" maxlength="50"
+							requiredMessage="'Nome' é obrigatório." label="Nome"
+							value="#{paginasPermissaoBean.paginaspermissao.nome}" />
+					</b:column>
+				</b:row>
+				<b:row>
+					<b:column>
+						<b:selectMultiMenu
+							value="#{paginasPermissaoBean.paginaspermissao.perfil}"
+							label="Perfil permitido" required="true"
+							requiredMessage="'Perfil' é obrigatório"
+							include-select-all-option="true" non-selected-text="Vazio"
+							select-all-text="Selecionar tudo">
+							<f:selectItem itemLabel="Administrador" itemValue="A" />
+							<f:selectItem itemLabel="Correspondente" itemValue="C" />
+							<f:selectItem itemLabel="Usuário" itemValue="U" />
+						</b:selectMultiMenu>
+					</b:column>
+				</b:row>
+				<b:row>
+					<b:column>
+						<b:selectBooleanCheckbox id="ativo" label="Ativo"
+							value="#{paginasPermissaoBean.paginaspermissao.ativo}" />
+					</b:column>
+				</b:row>
+				<f:facet name="footer">
+					<b:commandButton value="Salvar" ajax="true" look="primary"
+						icon="save" actionListener="#{paginasPermissaoBean.salvar}"
+						size="xs"
+						update=":formPerm:painelPerm :formCadPerm:painelCadPerm :formCadPerm:msgPerm" />
+					<b:button value="Fechar" dismiss="modal" icon="close" size="xs" />
+				</f:facet>
+			</b:panel>
+		</h:form>
+	</b:modal>
+
+
+
+
+</ui:composition>

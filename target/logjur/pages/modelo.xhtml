@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>LogJur - Sistema de Logística Jurídica - Logus IT</title>
+</h:head>
+<h:body>
+	<b:growl id="mensagem" />
+	<h:panelGrid>
+		<h:graphicImage library="imagens" name="logo.jpg" />
+	</h:panelGrid>
+	<hr />
+	<ui:insert></ui:insert>
+	<script>
+  $.blockUI.defaults = {
+		  message:'<h:graphicImage library="imagens" name="loading.gif" />',
+		  title: null, 
+		  draggable: true,
+		  theme: false,
+		  css: { 
+			    padding:        0, 
+		        margin:         0, 
+		        width:          '30%', 
+		        top:            '40%', 
+		        left:           '35%', 
+		        textAlign:      'center', 
+		        color:          '#000', 
+		        cursor:         'wait' 
+		    }, 
+		    overlayCSS:  { 
+		    	backgroundColor: '#000', 
+		        opacity:         0.6, 
+		        cursor:          'wait' 
+		    }, 
+		  centerX: true,
+		  centerY: true,
+		  allowBodyStretch: true, 
+		  
+		    // enable if you want key and mouse events to be disabled for content that is blocked 
+		    bindEvents: true, 
+		 
+		    // be default blockUI will supress tab navigation from leaving blocking content 
+		    // (if bindEvents is true) 
+		    constrainTabKey: true, 
+		 
+		    // fadeIn time in millis; set to 0 to disable fadeIn on block 
+		    fadeIn:  200, 
+		 
+		    // fadeOut time in millis; set to 0 to disable fadeOut on unblock 
+		    fadeOut:  400, 
+		 
+		    // time in millis to wait before auto-unblocking; set to 0 to disable auto-unblock 
+		    timeout: 0, 
+		 
+		    // disable if you don't want to show the overlay 
+		    showOverlay: true, 
+		 
+		    // if true, focus will be placed in the first available input field when 
+		    // page blocking 
+		    focusInput: true, 
+		 
+		    // suppresses the use of overlay styles on FF/Linux (due to performance issues with opacity) 
+		    // no longer needed in 2012 
+		    // applyPlatformOpacityRules: true, 
+		 
+		    // callback method invoked when fadeIn has completed and blocking message is visible 
+		    onBlock: null, 
+		 
+		    // callback method invoked when unblocking has completed; the callback is 
+		    // passed the element that has been unblocked (which is the window object for page 
+		    // blocks) and the options that were passed to the unblock call: 
+		    //   onUnblock(element, options) 
+		    onUnblock: null, 
+		 
+		    // don't ask; if you really must know: http://groups.google.com/group/jquery-en/browse_thread/thread/36640a8730503595/2f6a79a77a78e493#2f6a79a77a78e493 
+		    quirksmodeOffsetHack: 4, 
+		 
+		    // class name of the message block 
+		    blockMsgClass: 'blockMsg', 
+		 
+		    // if it is already blocked, then ignore it (don't unblock and reblock) 
+		    ignoreIfBlocked: false 
+		  }
+</script>
+</h:body>
+</html>
